@@ -1,0 +1,22 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  release:
+    uses: calebjakemossey/ci-workflows/.github/workflows/release.yaml@v1
+    with:
+      image-name: robot-software
+      variants: '["v1", "v2"]'
+      ros-distro: humble
+    secrets:
+      registry-token: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: read
+      packages: write
