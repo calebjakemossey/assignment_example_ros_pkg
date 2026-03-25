@@ -10,10 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-  checks: write
-
 jobs:
   ci:
     uses: calebjakemossey/ci-workflows/.github/workflows/ros-ci.yaml@v1
@@ -23,3 +19,4 @@ jobs:
     permissions:
       contents: read
       checks: write
+      packages: read
