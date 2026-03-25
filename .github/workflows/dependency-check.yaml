@@ -1,0 +1,17 @@
+name: Dependency Check
+
+on:
+  repository_dispatch:
+    types: [dependency-updated]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.client_payload.sha || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    uses: calebjakemossey/ci-workflows/.github/workflows/dependency-check.yaml@v1
+    with:
+      upstream-repo: ${{ github.event.client_payload.repo || 'calebjakemossey/assignment_example_pkg' }}
+      upstream-ref: ${{ github.event.client_payload.ref || 'main' }}
+      ros-distro: humble
