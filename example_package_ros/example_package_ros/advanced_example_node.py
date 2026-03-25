@@ -1,6 +1,4 @@
-'''
-Simple implementation of a node that uses the action and service from ExampleNode
-'''
+"""Simple implementation of a node that uses the action and service from ExampleNode."""
 
 import rclpy
 from rclpy.node import Node
