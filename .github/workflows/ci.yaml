@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  ci:
+    uses: calebjakemossey/ci-workflows/.github/workflows/ros-ci.yaml@v1
+    with:
+      ros-distro: humble
+      repos-file: workspace.repos
+    permissions:
+      contents: read
+      checks: write
