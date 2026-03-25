@@ -82,7 +82,7 @@ class ExampleNode(Node):
 
         goal_handle.succeed()
         result = ExampleAction.Result()
-        result.result_message = "OK"
+        result.result_message = "DONE"
         self.get_logger().info('Goal succeeded.')
         return result
 
