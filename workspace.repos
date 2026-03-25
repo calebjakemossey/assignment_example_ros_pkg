@@ -1,0 +1,5 @@
+repositories:
+  src/assignment_example_pkg:
+    type: git
+    url: https://github.com/calebjakemossey/assignment_example_pkg.git
+    version: v1.0.0
