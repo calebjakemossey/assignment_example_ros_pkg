@@ -1,3 +1,17 @@
+# Copyright 2024 Caleb Mossey
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import rclpy
 import time
 from rclpy.node import Node
@@ -7,6 +21,7 @@ from example_package_msgs.srv import Example as ExampleSrv
 from example_package_msgs.action import Example as ExampleAction
 from rclpy.action import ActionServer
 from rclpy.callback_groups import ReentrantCallbackGroup
+
 
 class ExampleNode(Node):
     def __init__(self):
@@ -55,7 +70,7 @@ class ExampleNode(Node):
             self.get_logger().info('Goal contains "fail"; aborting.')
             goal_handle.abort()
             result = ExampleAction.Result()
-            result.result_message = "Aborted" 
+            result.result_message = "Aborted"
             return result
 
         for i in range(10):
@@ -67,9 +82,10 @@ class ExampleNode(Node):
 
         goal_handle.succeed()
         result = ExampleAction.Result()
-        result.result_message = "OK" 
+        result.result_message = "OK"
         self.get_logger().info('Goal succeeded.')
         return result
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -82,6 +98,7 @@ def main(args=None):
         node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -5,16 +5,18 @@ This ROS2 package contains nodes that utilize the `Example` class from the ROS-i
 
 ## Prerequisites
 
-Ensure you have [ROS2 installed](https://docs.ros.org/en/iron/Installation.html). This guide also assumes you have set up a [ROS workspace](https://docs.ros.org/en/iron/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html) which will be named `your_ros_workspace` for the purpose of this guide.
+Ensure you have [ROS2 installed](https://docs.ros.org/en/humble/Installation.html). This guide also assumes you have set up a [ROS workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html) which will be named `your_ros_workspace` for the purpose of this guide.
 
-Example to create a workspace (in the example, using the `iron` ROS2 distribution):
+> **Note**: The original starter code referenced ROS2 Iron, which reached end-of-life in December 2024. This has been updated to use Humble (LTS, supported until May 2027).
+
+Example to create a workspace (in the example, using the `humble` ROS2 distribution):
 ```
 # create your workspace and navigate to it
 mkdir -p your_ros_workspace/src
 cd your_ros_workspace
 
 # source your ROS2 distribution
-source /opt/ros/iron/setup.bash
+source /opt/ros/humble/setup.bash
 
 # build the empty workspace
 colcon build
@@ -29,7 +31,7 @@ source install/local_setup.bash
 
 ## Building the Package
 
-The ROS package requires the `example_package` in the repository [assignment_example_pkg](https://github.com/Sunrise-Robotics/assignment_example_pkg), which you may have installed in the virtual environment.
+The ROS package requires the `example_package` in the repository [assignment_example_pkg](https://github.com/calebjakemossey/assignment_example_pkg), which you may have installed in the virtual environment.
 However, when using a virtual environment together with ROS, note:
 
 > **Important**: when using virtual environments with ROS2, as it might not recognize packages installed in a virtual environment. It's often recommended to install Python packages system-wide or in the same environment as ROS2.
