@@ -9,22 +9,23 @@ ROS2 workspace containing interface definitions and nodes that demonstrate topic
 ## Architecture
 
 ```mermaid
+%%{init: {'theme': 'dark', 'flowchart': {'curve': 'linear'}}}%%
 graph TB
+    classDef primary fill:#2d5986,stroke:#4a90d9,stroke-width:1px,color:#e0e0e0,rx:8,ry:8
+    classDef secondary fill:#1a3a5c,stroke:#3d7ab5,stroke-width:1px,color:#e0e0e0,rx:8,ry:8
+    classDef accent fill:#2d7d46,stroke:#4caf50,stroke-width:1px,color:#e0e0e0,rx:8,ry:8
+
     subgraph "This Repository"
-        msgs[example_package_msgs<br/>Service & Action definitions]
-        ros[example_package_ros<br/>ROS2 nodes]
+        msgs[example_package_msgs<br/>Service & Action definitions]:::primary
+        ros[example_package_ros<br/>ROS2 nodes]:::primary
     end
 
     subgraph "External Dependency"
-        pkg[assignment_example_pkg<br/>ROS-independent Example class]
+        pkg[assignment_example_pkg<br/>ROS-independent Example class]:::accent
     end
 
     ros --> msgs
     ros --> pkg
-
-    style msgs fill:#e1f5fe
-    style ros fill:#e1f5fe
-    style pkg fill:#fff3e0
 ```
 
 ## Packages
