@@ -42,6 +42,7 @@ jobs:
           find . -name '*.py' -not -path './build/*' -not -path './install/*' | xargs ament_copyright
 
   build-and-test:
+    needs: [lint]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     container:
