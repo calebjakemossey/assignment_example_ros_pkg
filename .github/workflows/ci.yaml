@@ -6,22 +6,122 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  checks: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-  packages: read
-  checks: write
-
 jobs:
-  ci:
-    uses: calebjakemossey/ci-workflows/.github/workflows/ros-ci.yaml@v1
-    with:
-      ros-distro: humble
-      repos-file: workspace.repos
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: ghcr.io/calebjakemossey/ros-ci:humble
+    steps:
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory '*'
+
+      - uses: actions/checkout@v4
+
+      - name: Run ament_flake8
+        run: |
+          . /opt/ros/humble/setup.sh
+          ament_flake8
+
+      - name: Run ament_pep257
+        run: |
+          . /opt/ros/humble/setup.sh
+          ament_pep257
+
+      - name: Run ament_copyright
+        run: |
+          . /opt/ros/humble/setup.sh
+          find . -name '*.py' -not -path './build/*' -not -path './install/*' | xargs ament_copyright
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: ghcr.io/calebjakemossey/ros-ci:humble
+    steps:
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory '*'
+
+      - uses: actions/checkout@v4
+        with:
+          path: src/repo
+
+      - name: Set up workspace
+        run: |
+          mkdir -p /ros_ws/src
+          cp -r $GITHUB_WORKSPACE/src/repo /ros_ws/src/repo
+          if [ -f /ros_ws/src/repo/workspace.repos ]; then
+            cd /ros_ws && vcs import src < src/repo/workspace.repos
+          fi
+
+      - name: Cache colcon workspace
+        uses: actions/cache@v4
+        with:
+          path: |
+            /ros_ws/build
+            /ros_ws/install
+            /ros_ws/log
+          key: colcon-humble-${{ hashFiles('/ros_ws/src/**/package.xml') }}
+          restore-keys: colcon-humble-
+
+      - name: Install system dependencies
+        run: |
+          cd /ros_ws
+          apt-get update
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
+
+      - name: Build
+        shell: bash
+        run: |
+          cd /ros_ws
+          source /opt/ros/humble/setup.bash
+          colcon build --symlink-install
+
+      - name: Test
+        shell: bash
+        run: |
+          cd /ros_ws
+          source /opt/ros/humble/setup.bash
+          source install/local_setup.bash
+          colcon test
+          colcon test-result --verbose
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ros-test-results
+          path: /ros_ws/build/**/test_results/**/*.xml
+
+  report-results:
+    needs: build-and-test
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: read
-      packages: read
       checks: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          name: ros-test-results
+          path: test-results
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        with:
+          name: ROS Test Results
+          path: 'test-results/**/*.xml'
+          reporter: java-junit
