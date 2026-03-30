@@ -12,8 +12,7 @@ jobs:
   release:
     uses: calebjakemossey/ci-workflows/.github/workflows/release.yaml@v1
     with:
-      image-name: robot-software
-      variants: '["v1", "v2"]'
+      image-name: assignment-example-ros-pkg
       ros-distro: humble
     secrets:
       registry-token: ${{ secrets.GITHUB_TOKEN }}
