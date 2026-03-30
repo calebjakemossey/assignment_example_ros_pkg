@@ -5,7 +5,7 @@ on:
     tags: ['v*']
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -16,6 +16,3 @@ jobs:
       ros-distro: humble
     secrets:
       registry-token: ${{ secrets.GITHUB_TOKEN }}
-    permissions:
-      contents: read
-      packages: write
