@@ -1,5 +1,6 @@
 # Example Package ROS
 
+> **Tip**: For a quick start without manual ROS2 setup, see the [Docker development instructions](../README.md#development-with-docker) in the top-level README.
 
 This ROS2 package contains nodes that utilize the `Example` class from the ROS-independent `example_package`.
 
