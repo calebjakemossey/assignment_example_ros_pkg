@@ -25,6 +25,7 @@ from rclpy.action import ActionClient
 class AdvancedExampleNode(Node):
     def __init__(self):
         super().__init__('advanced_example_node')
+        # E2E test: verify CI pipeline runs correctly
 
         # Subscriber
         self.subscription = self.create_subscription(
