@@ -40,3 +40,23 @@ graph TB
 See [CONTRIBUTING.md](CONTRIBUTING.md) for workspace setup, building, and testing instructions.
 
 Refer to [example_package_ros/README.md](example_package_ros/README.md) for detailed usage of the ROS2 nodes.
+
+## Development with Docker
+
+The recommended way to build and test is using the CI Docker image:
+
+```bash
+docker pull ghcr.io/calebjakemossey/ros-ci:humble
+docker run -it -v $(pwd):/ros_ws/src/repo ghcr.io/calebjakemossey/ros-ci:humble bash
+
+# Inside the container:
+cd /ros_ws
+vcs import src < src/repo/workspace.repos
+source /opt/ros/humble/setup.bash
+rosdep update && rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install
+source install/local_setup.bash
+colcon test && colcon test-result --verbose
+```
+
+This provides the same environment used by CI, ensuring local results match pipeline results.
